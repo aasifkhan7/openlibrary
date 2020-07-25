@@ -18,7 +18,7 @@ PYTHON=$(if $(wildcard env),env/bin/python,python)
 
 .PHONY: all clean distclean git css js i18n lint
 
-all: css js i18n
+all: git css js i18n
 
 css:
 	mkdir -p $(BUILD)
