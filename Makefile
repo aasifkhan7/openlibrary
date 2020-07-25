@@ -18,7 +18,7 @@ PYTHON=$(if $(wildcard env),env/bin/python,python)
 
 .PHONY: all clean distclean git css js i18n lint
 
-all: css js i18n
+all: git css js i18n
 
 css:
 	mkdir -p $(BUILD)
@@ -40,7 +40,6 @@ i18n:
 	$(PYTHON) ./scripts/i18n-messages compile
 
 git:
-	git submodule init
 	git submodule update --init --recursive
 
 clean:
