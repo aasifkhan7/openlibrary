@@ -31,7 +31,6 @@ from openlibrary.accounts import (
 from openlibrary.core.sponsorships import get_sponsored_editions
 from openlibrary.plugins.upstream import borrow, forms, utils
 
-from six import PY2
 from six.moves import range
 from six.moves import urllib
 
@@ -816,9 +815,6 @@ class readinglog_stats(delegate.page):
             }
             for a in web.ctx.site.get_many(list(author_keys))
         ]
-        # TODO: (cclauss) Python 3 workaround for lang not in web.ctx
-        # Was: lang=web.ctx.lang
-        lang = web.ctx.lang if PY2 or 'lang' in web.ctx else 'en'
         page = render['account/readinglog_stats'](
             json.dumps(works_json),
             json.dumps(authors_json),
@@ -827,7 +823,7 @@ class readinglog_stats(delegate.page):
             user.displayname,
             web.ctx.path.rsplit('/', 1)[0],
             key,
-            lang=lang,
+            lang=web.ctx.lang,
         )
         page.v2 = True
         return page
@@ -891,7 +887,7 @@ class fetch_goodreads(delegate.page):
                               delimiter=',', quotechar='"')
         header = csv_file.next()
         books = {}
-        books_wo_isbns = {}
+        books_wo_isbns = {} 
         for book in list(csv_file):
             _book = dict(zip(header, book))
             _book['ISBN'] = _book['ISBN'].replace('"','').replace('=','')
@@ -902,7 +898,7 @@ class fetch_goodreads(delegate.page):
                 books[_book['ISBN13']] = _book
                 books[_book['ISBN13']]['ISBN'] = _book['ISBN13']
             else:
-                books_wo_isbns[_book['Book Id']] = _book
+                books_wo_isbns[_book['Book Id']] = _book     
         return render['account/import'](books, books_wo_isbns)
 
 
