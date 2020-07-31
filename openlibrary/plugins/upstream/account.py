@@ -31,6 +31,7 @@ from openlibrary.accounts import (
 from openlibrary.core.sponsorships import get_sponsored_editions
 from openlibrary.plugins.upstream import borrow, forms, utils
 
+from six import PY2
 from six.moves import range
 from six.moves import urllib
 
@@ -817,6 +818,7 @@ class readinglog_stats(delegate.page):
         ]
         # TODO: (cclauss) Python 3 workaround for lang not in web.ctx
         # Was: lang=web.ctx.lang
+        lang = web.ctx.lang if PY2 or 'lang' in web.ctx else 'en'
         page = render['account/readinglog_stats'](
             json.dumps(works_json),
             json.dumps(authors_json),
@@ -825,7 +827,7 @@ class readinglog_stats(delegate.page):
             user.displayname,
             web.ctx.path.rsplit('/', 1)[0],
             key,
-            lang=dict(web.ctx).get('lang', 'en')
+            lang=lang,
         )
         page.v2 = True
         return page
