@@ -132,8 +132,8 @@ class upload2:
             raise e
 
         source_url = i.source_url
-        data = i.data
-
+        data = web.data()
+        
         if source_url:
             try:
                 data = download(source_url)

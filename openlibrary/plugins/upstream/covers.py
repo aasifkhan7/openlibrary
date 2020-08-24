@@ -3,6 +3,8 @@
 import web
 import simplejson
 
+import requests
+
 from infogami.utils import delegate
 from infogami.utils.view import safeint
 from openlibrary import accounts
@@ -58,7 +60,7 @@ class add_cover(delegate.page):
         user = accounts.get_current_user()
         params = {
             "author": user and user.key,
-            "data": data,
+#            "data": data,
             "source_url": i.url,
             "olid": olid,
             "ip": web.ctx.ip
@@ -71,8 +73,8 @@ class add_cover(delegate.page):
             upload_url = "http:" + upload_url
 
         try:
-            response = urllib.request.urlopen(upload_url, urllib.parse.urlencode(params))
-            out = response.read()
+            response = requests.post(upload_url+"?"+urllib.parse.urlencode(params), data=data)
+            out = response.content
         except urllib.error.HTTPError as e:
             out = {'error': e.read()}
 
